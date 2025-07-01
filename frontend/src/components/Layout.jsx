@@ -86,17 +86,14 @@ const Layout = () => {
 
           {/* Navigation Links (Static) */}
           <div style={{ display: "flex", gap: "15px", fontSize: "14px" }}>
-            <Link to="/" style={{ textDecoration: "none", color: "#444" }}>
-              Explore
+           <Link to="/Register" style={{ textDecoration: "none", color: "#444" }}>
+              Register
             </Link>
-            <Link to="/create" style={{ textDecoration: "none", color: "#444" }}>
-              Create
+            <Link to="/Login" style={{ textDecoration: "none", color: "#444" }}>
+              Login
             </Link>
-            <Link to="/profile" style={{ textDecoration: "none", color: "#0891b2" }}>
-              Profile
-            </Link>
-            <Link to="/settings" style={{ textDecoration: "none", color: "#444" }}>
-              Settings
+            <Link to="/Home" style={{ textDecoration: "none", color: "#0891b2" }}>
+              Home
             </Link>
           </div>
         </nav>

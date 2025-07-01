@@ -5,7 +5,6 @@ const Home = () => {
   const [error, setError] = useState("");
 
   useEffect(() => {
-    // Simulate loading dummy posts
     const dummyPosts = [
       { id: 1, title: "Welcome to Kinnect", content: "This is a sample post." },
       { id: 2, title: "Another Post", content: "Here's another example." },

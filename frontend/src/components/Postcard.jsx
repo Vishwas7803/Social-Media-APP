@@ -1,7 +1,4 @@
-// src/components/PostCard.js
 import React from "react";
-import "./PostCard.css";
-
 const PostCard = ({ post }) => {
   return (
     <div className="post-card">
