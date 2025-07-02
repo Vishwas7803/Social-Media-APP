@@ -1,0 +1,23 @@
+/* src/pages/Profile.css */
+.profile-container {
+  padding: 20px;
+}
+
+.profile-header {
+  display: flex;
+  gap: 20px;
+  align-items: center;
+}
+
+.profile-image {
+  width: 100px;
+  height: 100px;
+  background-color: #999;
+  border-radius: 50%;
+}
+
+.profile-stats {
+  margin-top: 10px;
+  display: flex;
+  gap: 20px;
+}

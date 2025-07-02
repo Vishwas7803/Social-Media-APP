@@ -95,6 +95,9 @@ const Layout = () => {
             <Link to="/Home" style={{ textDecoration: "none", color: "#0891b2" }}>
               Home
             </Link>
+           <Link to="/Profile" style={{ textDecoration: "none", color: "#0891b2" }}>
+              Profile
+            </Link>
           </div>
         </nav>
       </header>
