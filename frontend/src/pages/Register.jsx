@@ -8,116 +8,149 @@ function Register() {
     confirmPassword: "",
   });
 
-  function handleChange(e) {
+  const handleChange = (e) => {
     const { name, value } = e.target;
     setForm((prev) => ({ ...prev, [name]: value }));
-  }
+  };
 
-  function handleRegister(e) {
+  const handleRegister = (e) => {
     e.preventDefault();
     if (form.password !== form.confirmPassword) {
       alert("Passwords do not match!");
       return;
     }
-    alert(
-      `Username: ${form.username}\nEmail: ${form.email}\nPassword: ${form.password}`
-    );
-  }
-
-  const containerStyle = {
-    minHeight: "100vh",
-    display: "flex",
-    justifyContent: "center",
-    alignItems: "center",
-    background: "linear-gradient(135deg, #74ebd5, #acb6e5)",
-    padding: "20px",
+    alert(`Username: ${form.username}\nEmail: ${form.email}\nPassword: ${form.password}`);
   };
 
-  const formStyle = {
-    backgroundColor: "#fff",
-    padding: "30px 40px",
-    borderRadius: "12px",
-    boxShadow: "0 4px 20px rgba(0, 0, 0, 0.15)",
-    maxWidth: "400px",
-    width: "100%",
-    display: "flex",
-    flexDirection: "column",
+  // === Colorful & Modern Styling ===
+  const styles = {
+    container: {
+      minHeight: "100vh",
+      display: "flex",
+      justifyContent: "center",
+      alignItems: "center",
+      background: "linear-gradient(135deg, #f7971e, #ffd200)",
+      padding: "20px",
+    },
+    form: {
+      backgroundColor: "#ffffff",
+      padding: "32px",
+      borderRadius: "16px",
+      boxShadow: "0 12px 30px rgba(0, 0, 0, 0.15)",
+      width: "100%",
+      maxWidth: "400px",
+      display: "flex",
+      flexDirection: "column",
+    },
+    heading: {
+      textAlign: "center",
+      fontSize: "1.8rem",
+      marginBottom: "20px",
+      background: "linear-gradient(to right, #f7971e, #ff416c)",
+      WebkitBackgroundClip: "text",
+      WebkitTextFillColor: "transparent",
+      fontWeight: "bold",
+    },
+    label: {
+      fontWeight: "500",
+      marginBottom: "4px",
+      color: "#444",
+    },
+    input: {
+      padding: "10px",
+      fontSize: "15px",
+      border: "1px solid #ccc",
+      borderRadius: "8px",
+      marginBottom: "16px",
+      transition: "all 0.25s",
+    },
+    inputFocus: {
+      borderColor: "#f7971e",
+      boxShadow: "0 0 0 3px rgba(247, 151, 30, 0.2)",
+    },
+    button: {
+      padding: "12px",
+      background: "linear-gradient(to right, #ff416c, #ff4b2b)",
+      color: "#fff",
+      fontWeight: "600",
+      fontSize: "1rem",
+      border: "none",
+      borderRadius: "8px",
+      cursor: "pointer",
+      transition: "transform 0.2s ease, box-shadow 0.2s ease",
+    },
   };
 
-  const inputStyle = {
-    padding: "10px",
-    marginTop: "5px",
-    marginBottom: "15px",
-    border: "1px solid #ccc",
-    borderRadius: "6px",
-    fontSize: "14px",
-  };
-
-  const labelStyle = {
-    fontWeight: "bold",
-    color: "#555",
-    marginBottom: "5px",
-  };
-
-  const buttonStyle = {
-    padding: "12px",
-    backgroundColor: "#74ebd5",
-    color: "#fff",
-    fontWeight: "bold",
-    border: "none",
-    borderRadius: "6px",
-    cursor: "pointer",
-    transition: "background-color 0.3s",
-  };
+  // Dynamic focus style logic
+  const [focusField, setFocusField] = useState(null);
+  const applyFocus = (field) =>
+    focusField === field ? { ...styles.input, ...styles.inputFocus } : styles.input;
 
   return (
-    <div style={containerStyle}>
-      <form onSubmit={handleRegister} style={formStyle}>
-        <h2 style={{ textAlign: "center", marginBottom: "20px", color: "#333" }}>
-          Register
-        </h2>
+    <div style={styles.container}>
+      <form onSubmit={handleRegister} style={styles.form}>
+        <h2 style={styles.heading}>Register</h2>
 
-        <label style={labelStyle}>Username</label>
+        <label style={styles.label}>Username</label>
         <input
-          type="text"
           name="username"
+          type="text"
           value={form.username}
           onChange={handleChange}
+          onFocus={() => setFocusField("username")}
+          onBlur={() => setFocusField(null)}
+          style={applyFocus("username")}
           required
-          style={inputStyle}
         />
 
-        <label style={labelStyle}>Email</label>
+        <label style={styles.label}>Email</label>
         <input
-          type="email"
           name="email"
+          type="email"
           value={form.email}
           onChange={handleChange}
+          onFocus={() => setFocusField("email")}
+          onBlur={() => setFocusField(null)}
+          style={applyFocus("email")}
           required
-          style={inputStyle}
         />
 
-        <label style={labelStyle}>Password</label>
+        <label style={styles.label}>Password</label>
         <input
-          type="password"
           name="password"
+          type="password"
           value={form.password}
           onChange={handleChange}
+          onFocus={() => setFocusField("password")}
+          onBlur={() => setFocusField(null)}
+          style={applyFocus("password")}
           required
-          style={inputStyle}
         />
 
-        <label style={labelStyle}>Confirm Password</label>
+        <label style={styles.label}>Confirm Password</label>
         <input
-          type="password"
           name="confirmPassword"
+          type="password"
           value={form.confirmPassword}
           onChange={handleChange}
+          onFocus={() => setFocusField("confirmPassword")}
+          onBlur={() => setFocusField(null)}
+          style={applyFocus("confirmPassword")}
           required
-          style={inputStyle}
         />
 
-        <button type="submit" style={buttonStyle}>
+        <button
+          type="submit"
+          style={styles.button}
+          onMouseEnter={(e) => {
+            e.currentTarget.style.transform = "translateY(-2px)";
+            e.currentTarget.style.boxShadow = "0 8px 22px rgba(255, 65, 108, 0.4)";
+          }}
+          onMouseLeave={(e) => {
+            e.currentTarget.style.transform = "translateY(0)";
+            e.currentTarget.style.boxShadow = "none";
+          }}
+        >
           Register
         </button>
       </form>
