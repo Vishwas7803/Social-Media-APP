@@ -258,11 +258,12 @@ const Layout = () => {
               </button>
             </form>
 
+            {/* ✅ Updated nav-links: Home, Create, Login, Register */}
             <div className="nav-links">
-              <Link to="/" className="nav-link">Explore</Link>
+              <Link to="/" className="nav-link">Home</Link>
               <Link to="/create" className="nav-link">Create</Link>
               <Link to="/login" className="nav-link">Login</Link>
-              <Link to="/register" className="nav-link">Register</Link> {/* <- ADDED */}
+              <Link to="/register" className="nav-link">Register</Link>
             </div>
           </nav>
         </header>
@@ -271,7 +272,9 @@ const Layout = () => {
           <Outlet />
         </main>
 
-        <Link to="/create" className="floating-button" title="Create Post">+</Link>
+        <Link to="/create" className="floating-button" title="Create Post">
+          +
+        </Link>
       </div>
     </>
   );

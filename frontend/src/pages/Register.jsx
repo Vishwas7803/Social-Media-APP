@@ -1,6 +1,9 @@
 import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";   // ✅ import useNavigate
 
 function Register() {
+  const navigate = useNavigate();                 // ✅ create a navigate fn
+
   const [form, setForm] = useState({
     username: "",
     email: "",
@@ -19,10 +22,17 @@ function Register() {
       alert("Passwords do not match!");
       return;
     }
-    alert(`Username: ${form.username}\nEmail: ${form.email}\nPassword: ${form.password}`);
+
+    // 👉 here you’d normally send the data to your backend
+    alert(
+      `Username: ${form.username}\nEmail: ${form.email}\nPassword: ${form.password}`
+    );
+
+    // ✅ redirect the user to /login
+    navigate("/login");
   };
 
-  // === Colorful & Modern Styling ===
+  /* ---------- Colorful & Modern Styling ---------- */
   const styles = {
     container: {
       minHeight: "100vh",
@@ -81,7 +91,7 @@ function Register() {
     },
   };
 
-  // Dynamic focus style logic
+  /* ---------- Dynamic focus style ---------- */
   const [focusField, setFocusField] = useState(null);
   const applyFocus = (field) =>
     focusField === field ? { ...styles.input, ...styles.inputFocus } : styles.input;
@@ -144,7 +154,8 @@ function Register() {
           style={styles.button}
           onMouseEnter={(e) => {
             e.currentTarget.style.transform = "translateY(-2px)";
-            e.currentTarget.style.boxShadow = "0 8px 22px rgba(255, 65, 108, 0.4)";
+            e.currentTarget.style.boxShadow =
+              "0 8px 22px rgba(255, 65, 108, 0.4)";
           }}
           onMouseLeave={(e) => {
             e.currentTarget.style.transform = "translateY(0)";

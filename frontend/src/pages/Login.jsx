@@ -1,15 +1,24 @@
+// Login.jsx
 import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";   // ✅ import useNavigate
 
 function Login() {
+  const navigate = useNavigate();                // ✅ create navigate fn
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
 
-  function handleLogin(e) {
+  /* ------------ Submit handler ------------ */
+  const handleLogin = (e) => {
     e.preventDefault();
-    alert(`Username: ${username}\nPassword: ${password}`);
-  }
 
-  // Inline styles (organized & colorful)
+    // 👉 you would normally do real authentication here
+    alert(`Welcome, ${username}! Account login successful.`);
+
+    // ✅ redirect to the home page
+    navigate("/");
+  };
+
+  /* ------------ Inline styles ------------ */
   const styles = {
     container: {
       display: "flex",
@@ -65,6 +74,7 @@ function Login() {
     },
   };
 
+  /* Focus/blur helpers */
   const handleFocus = (e) => {
     e.target.style.borderColor = "#7f5af0";
     e.target.style.boxShadow = "0 0 0 3px rgba(127, 90, 240, 0.2)";
@@ -74,6 +84,7 @@ function Login() {
     e.target.style.boxShadow = "none";
   };
 
+  /* ------------ JSX ------------ */
   return (
     <div style={styles.container}>
       <form onSubmit={handleLogin} style={styles.card}>
@@ -108,7 +119,8 @@ function Login() {
           style={styles.button}
           onMouseEnter={(e) => {
             e.currentTarget.style.transform = "translateY(-2px)";
-            e.currentTarget.style.boxShadow = "0 10px 22px rgba(255, 75, 43, 0.4)";
+            e.currentTarget.style.boxShadow =
+              "0 10px 22px rgba(255, 75, 43, 0.4)";
           }}
           onMouseLeave={(e) => {
             e.currentTarget.style.transform = "translateY(0)";

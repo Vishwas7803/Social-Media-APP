@@ -1,22 +1,25 @@
-import React from 'react';
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
-import Layout from './components/Layout';
-import Login from "./pages/Login";
-import Register from "./pages/Register";
+// App.jsx
+import { BrowserRouter, Routes, Route } from "react-router-dom";
+import Layout     from "./components/Layout";
+import Home       from "./pages/Home";
+import Login      from "./pages/Login";
+import Register   from "./pages/Register";
 import CreatePost from "./pages/CreatePost";
-import './App.css';
 
-const App = () => {
+export default function App() {
   return (
-    <Router>
+    <BrowserRouter>
       <Routes>
-        <Route path="/*" element={<Layout />} />
-        <Route path="/login" element={<Login />} />
-        <Route path="/register" element={<Register />} />
-        <Route path="/create" element={<CreatePost />} />
-      </Routes>
-    </Router>
-  );
-};
+        {/* Everything under Layout */}
+        <Route path="/" element={<Layout />}>
+          <Route index element={<Home />} />          {/* /            */}
+          <Route path="create" element={<CreatePost />} /> {/* /create     */}
+        </Route>
 
-export default App;
+        {/* Stand‑alone auth routes (no Layout) */}
+        <Route path="/login"    element={<Login />} />
+        <Route path="/register" element={<Register />} />
+      </Routes>
+    </BrowserRouter>
+  );
+}
