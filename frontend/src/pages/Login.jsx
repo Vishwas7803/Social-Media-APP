@@ -1,5 +1,5 @@
 // Login.jsx
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";   // ✅ import useNavigate
 
 function Login() {
@@ -7,15 +7,23 @@ function Login() {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
 
+  /* ------------ Redirect if already logged in ------------ */
+  useEffect(() => {
+    if (localStorage.getItem("username")) {
+      navigate("/", { replace: true });
+    }
+  }, [navigate]);
+
   /* ------------ Submit handler ------------ */
   const handleLogin = (e) => {
     e.preventDefault();
 
     // 👉 you would normally do real authentication here
+    localStorage.setItem("username", username);      // 🆕 persist username
     alert(`Welcome, ${username}! Account login successful.`);
 
     // ✅ redirect to the home page
-    navigate("/");
+    navigate("/", { replace: true });
   };
 
   /* ------------ Inline styles ------------ */
