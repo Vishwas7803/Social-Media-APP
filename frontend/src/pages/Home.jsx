@@ -3,8 +3,6 @@ import { useEffect, useState } from "react";
 
 function Home() {
   const [posts, setPosts] = useState([]);
-
-  // --- Dummy data (no backend) ---
   const dummyPosts = [
     {
       id: 1,
