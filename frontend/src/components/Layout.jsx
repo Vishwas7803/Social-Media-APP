@@ -193,6 +193,9 @@ const Layout = () => {
             <div className="nav-links">
               <Link to="/" className="nav-link">Home</Link>
               <Link to="/create" className="nav-link">Create</Link>
+              <Link to="/notifications" className="floating-button" title="Notifications">
+  🔔
+</Link>
 
               {!username ? (
                 <>

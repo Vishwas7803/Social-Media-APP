@@ -1,8 +1,5 @@
-// ViewProfile.jsx
 import { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
-
-/* ---------- Dummy data (module‑scope constants) ---------- */
 const dummyUsers = [
   { _id: "1", username: "john" },
   { _id: "2", username: "jane" },
