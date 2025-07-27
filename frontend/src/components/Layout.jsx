@@ -1,15 +1,20 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { Link, Outlet, useNavigate } from "react-router-dom";
-
+import { BiHomeHeart } from "react-icons/bi";
+import { AiFillHome } from "react-icons/ai";
+import { FaUserCircle, FaPlus } from "react-icons/fa";
+import { FiSettings, FiLogIn } from "react-icons/fi";
+import { useAuth } from "../contexts/AuthContexts";
+import Logosvg from "../assets/kinnectlogo.svg"; // Assuming you have a logo SVG file
 const Layout = () => {
+  const { user, logout, loading } = useAuth();
   const navigate = useNavigate();
   const [searchQuery, setSearchQuery] = useState("");
-  const [username, setUsername] = useState("");
 
-  useEffect(() => {
-    const stored = localStorage.getItem("username");
-    if (stored) setUsername(stored);
-  }, []);
+  const handleLogout = () => {
+    logout();
+    navigate("/login");
+  };
 
   const handleSearchSubmit = (e) => {
     e.preventDefault();
@@ -19,208 +24,111 @@ const Layout = () => {
     }
   };
 
-  const handleLogout = () => {
-    localStorage.removeItem("username");
-    setUsername("");
-    navigate("/login", { replace: true });
-  };
+  if (loading) {
+    return (
+      <div className="min-h-screen flex items-center justify-center text-xl">
+        Loading...
+      </div>
+    );
+  }
 
   return (
-    <>
-      {/* ================= UNIQUE CSS ================= */}
-      <style>{`
-        /* ===== Theme ===== */
-        :root {
-          --bg-dark: #0d0d12;
-          --bg-light: #17171f;
-          --surface: #ffffff;
-          --text-muted: #9ca3af;
-          --primary: #ff7a18;
-          --secondary: #af00ff;
-          --accent: #00c6ff;
-          --radius: 18px;
-        }
-        body {
-          margin: 0;
-          font-family: "Poppins", Arial, sans-serif;
-          background: var(--bg-dark);
-          color: var(--surface);
-        }
-        html {
-          scroll-behavior: smooth;
-        }
+    <div className="min-h-screen flex flex-col bg-gray-50">
+      {/* Navbar */}
+      <header className="w-full bg-white shadow-md border-b border-gray-200 fixed top-0 left-0 right-0 z-40">
+        <nav className="flex justify-between items-center px-4 md:px-6 py-3 max-w-7xl mx-auto">
+          {/* Logo / Brand */}
+          <Link
+            to="/"
+            className="flex items-center gap-2 text-2xl font-extrabold "
+          >
+            <h1 className="cedarville-cursive-regular text-3xl text-black-800">
+              Kinnect
+            </h1>
+          </Link>
 
-        /* ===== Layout ===== */
-        .layout-container {
-          display: flex;
-          flex-direction: column;
-          min-height: 100vh;
-        }
+          {/* Search Bar */}
+          <form
+            onSubmit={handleSearchSubmit}
+            className="hidden md:flex items-center gap-2"
+          >
+            <input
+              type="text"
+              placeholder="Search username..."
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+              className="px-3 py-1 border rounded-md focus:outline-none focus:ring-2 focus:ring-cyan-400 text-sm"
+            />
+            <button
+              type="submit"
+              className="bg-cyan-600 text-white px-3 py-1 rounded hover:bg-cyan-700 text-sm"
+            >
+              Search
+            </button>
+          </form>
 
-        /* ===== Navbar ===== */
-        .navbar {
-          position: fixed;
-          top: 0;
-          left: 0;
-          right: 0;
-          background: rgba(23, 23, 31, 0.75);
-          backdrop-filter: blur(14px);
-          border-bottom: 1px solid rgba(255, 255, 255, 0.06);
-          z-index: 1000;
-          animation: navDrop 0.45s ease-out;
-        }
-        @keyframes navDrop {
-          from {transform: translateY(-100%); opacity:0;}
-          to {transform: translateY(0); opacity:1;}
-        }
-        .navbar-content {
-          max-width: 1200px;
-          margin-inline: auto;
-          padding: 14px 26px;
-          display: flex;
-          align-items: center;
-          justify-content: space-between;
-          gap: 1rem;
-        }
-        .brand {
-          font-size: 30px;
-          font-weight: 900;
-          text-decoration: none;
-          background: linear-gradient(120deg, var(--primary), var(--accent));
-          -webkit-background-clip: text;
-          -webkit-text-fill-color: transparent;
-          transition: transform 0.25s;
-        }
-        .brand:hover {transform: scale(1.08) rotate(-1deg);}
+          {/* Navigation Links */}
+          <div className="flex gap-4 items-center text-sm font-medium text-gray-700">
+            <Link
+              to="/"
+              className="flex items-center gap-1 hover:text-cyan-600"
+            >
+              <AiFillHome className="text-lg" />
+              Explore
+            </Link>
 
-        /* ===== Search ===== */
-        .search-form {display: flex; gap: 0.5rem; align-items: center;}
-        .search-input {
-          width: 180px;
-          padding: 8px 14px;
-          font-size: 15px;
-          border: none;
-          border-radius: 50px;
-          background: var(--bg-light);
-          color: var(--surface);
-          transition: width 0.4s, box-shadow 0.3s;
-        }
-        .search-input:focus {
-          outline: none;
-          width: 240px;
-          box-shadow: 0 0 0 3px var(--accent);
-        }
-        .search-button {
-          position: relative;
-          overflow: hidden;
-          padding: 8px 18px;
-          border: none;
-          border-radius: 50px;
-          font-size: 14px;
-          font-weight: 600;
-          color: var(--surface);
-          background: var(--primary);
-          cursor: pointer;
-          transition: filter 0.3s;
-        }
-        .search-button:hover {filter: brightness(1.15);}
+            {user && (
+              <Link
+                to="/create"
+                className="flex items-center gap-1 hover:text-cyan-600"
+              >
+                <FaPlus className="text-lg" />
+                Create
+              </Link>
+            )}
 
-        /* ===== Links ===== */
-        .nav-links {display: flex; gap: 24px; font-size: 15px; font-weight: 600;}
-        .nav-link {
-          text-decoration: none;
-          color: var(--surface);
-          position: relative;
-        }
-        .nav-link::after {
-          content: "";
-          position: absolute;
-          left: 0; bottom: -6px;
-          width: 0%; height: 2px;
-          background: var(--primary);
-          transition: width 0.3s;
-        }
-        .nav-link:hover::after {width: 100%;}
-        .nav-link:hover {color: var(--primary);}  
-        .nav-link[data-logout] {color:#f87171;}
+            {user ? (
+              <>
+                <span className="hidden md:inline-flex items-center gap-1 text-cyan-700">
+                  <FaUserCircle className="text-lg" />
+                  <Link to="/profile">{user.username}</Link>
+                </span>
+                <Link
+                  to="/settings"
+                  className="flex items-center gap-1 hover:text-cyan-600"
+                >
+                  <FiSettings className="text-lg" />
+                </Link>
+              </>
+            ) : (
+              <Link
+                to="/login"
+                className="flex items-center gap-1 hover:text-cyan-600"
+              >
+                <FiLogIn className="text-lg" />
+                Login
+              </Link>
+            )}
+          </div>
+        </nav>
+      </header>
 
-        /* ===== Main ===== */
-        .main-content {
-          flex: 1;
-          max-width: 1200px;
-          margin-inline: auto;
-          padding: 110px 24px 120px;
-          animation: fadeUp 0.4s ease;
-        }
-        @keyframes fadeUp {
-          from {opacity:0; transform: translateY(20px);} 
-          to {opacity:1; transform: translateY(0);} 
-        }
+      {/* Main Content */}
+      <main className="pt-20 px-4 pb-32 max-w-7xl mx-auto w-full">
+        <Outlet />
+      </main>
 
-        /* ===== Floating Action Button ===== */
-        .floating-button {
-          position: fixed;
-          bottom: 28px; right: 28px;
-          width: 62px; height: 62px;
-          border-radius: 50%;
-          display: flex; align-items:center; justify-content:center;
-          font-size:36px;
-          text-decoration:none;
-          color: var(--surface);
-          background: radial-gradient(circle at 30% 30%, var(--secondary), var(--primary));
-          box-shadow: 0 10px 24px rgba(0,0,0,0.3);
-          transition: transform 0.3s;
-        }
-        .floating-button:hover {transform: translateY(-6px) rotate(8deg);}      
-      `}</style>
-
-      <div className="layout-container">
-        <header className="navbar">
-          <nav className="navbar-content">
-            <Link to="/" className="brand">Snapo</Link>
-
-            <form onSubmit={handleSearchSubmit} className="search-form">
-              <input
-                type="text"
-                placeholder="Search username…"
-                value={searchQuery}
-                onChange={(e) => setSearchQuery(e.target.value)}
-                className="search-input"
-              />
-              <button type="submit" className="search-button"><span>Go</span></button>
-            </form>
-
-            <div className="nav-links">
-              <Link to="/" className="nav-link">Home</Link>
-              <Link to="/create" className="nav-link">Create</Link>
-              <Link to="/notifications" className="floating-button" title="Notifications">
-  🔔
-</Link>
-
-              {!username ? (
-                <>
-                  <Link to="/login" className="nav-link">Login</Link>
-                  <Link to="/register" className="nav-link">Register</Link>
-                </>
-              ) : (
-                <>
-                  <span className="nav-link" style={{ cursor: "default" }}>@{username}</span>
-                  <span className="nav-link" data-logout onClick={handleLogout} style={{ cursor: "pointer" }}>Logout</span>
-                </>
-              )}
-            </div>
-          </nav>
-        </header>
-
-        <main className="main-content">
-          <Outlet />
-        </main>
-
-        <Link to="/create" className="floating-button" title="Create Post">
-          +
+      {/* Create Post Floating Button */}
+      {user && (
+        <Link
+          to="/create"
+          className="fixed bottom-6 right-6 md:right-10 bg-cyan-600 hover:bg-cyan-700 text-white p-4 rounded-full shadow-lg transition"
+          title="Create Post"
+        >
+          <FaPlus className="text-lg" />
         </Link>
-      </div>
-    </>
+      )}
+    </div>
   );
 };
 
