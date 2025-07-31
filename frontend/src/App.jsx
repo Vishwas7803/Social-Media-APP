@@ -1,27 +1,40 @@
-// App.jsx
-import { BrowserRouter, Routes, Route } from "react-router-dom";
-import Layout     from "./components/Layout";
-import Home       from "./pages/Home";
-import Login      from "./pages/Login";
-import Register   from "./pages/Register";
+import { Routes, Route } from "react-router-dom";
+import { useAuth } from "./contexts/AuthContexts";
+
+import Layout from "./components/Layout";
+import Home from "./pages/Home";
+import Login from "./pages/Login";
+import Register from "./pages/Register";
+import Profile from "./pages/Profile";
 import CreatePost from "./pages/CreatePost";
-import Notifications from "./pages/Notification";
+import ViewProfile from "./pages/ViewProfile";
+import KinnectLoader from "./components/KinnectLoader";
+import SearchPage from "./pages/SearchPage";
 
-export default function App() {
+const App = () => {
+  const { loading } = useAuth();
+
+  if (loading) {
+    return (
+      <div className="flex justify-center items-center h-screen">
+        <KinnectLoader />
+      </div>
+    );
+  }
+
   return (
-    <BrowserRouter>
-      <Routes>
-        {/* Everything under Layout */}
-        <Route path="/" element={<Layout />}>
-          <Route index element={<Home />} />
-          <Route path="create" element={<CreatePost />} />
-           <Route path="Notifications" element={<Notifications />} />
-        </Route>
-
-        {/* Stand‑alone auth routes (no Layout) */}
-        <Route path="/login"    element={<Login />} />
-        <Route path="/register" element={<Register />} />
-      </Routes>
-    </BrowserRouter>
+    <Routes>
+      <Route element={<Layout />}>
+        <Route path="/" element={<Home />} />
+        <Route path="/profile" element={<Profile />} />
+        <Route path="/create" element={<CreatePost />} />
+        <Route path="/profile/:id" element={<ViewProfile />} />
+        <Route path="/:query" element={<SearchPage />} />;
+      </Route>
+      <Route path="/login" element={<Login />} />
+      <Route path="/register" element={<Register />} />
+    </Routes>
   );
-}
+};
+
+export default App;

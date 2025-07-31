@@ -1,172 +1,121 @@
-import React, { useState } from "react";
-import { useNavigate } from "react-router-dom";   // ✅ import useNavigate
+import { useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
+import axios from "axios";
+import { FiUserPlus } from "react-icons/fi";
+import Button from "../components/Button";
 
-function Register() {
-  const navigate = useNavigate();                 // ✅ create a navigate fn
-
-  const [form, setForm] = useState({
-    username: "",
-    email: "",
-    password: "",
-    confirmPassword: "",
-  });
+const Register = () => {
+  const [form, setForm] = useState({ username: "", email: "", password: "" });
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState("");
+  const navigate = useNavigate();
 
   const handleChange = (e) => {
-    const { name, value } = e.target;
-    setForm((prev) => ({ ...prev, [name]: value }));
+    setForm({ ...form, [e.target.name]: e.target.value });
+    setError("");
   };
 
-  const handleRegister = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    if (form.password !== form.confirmPassword) {
-      alert("Passwords do not match!");
-      return;
+    setLoading(true);
+
+    try {
+      const res = await axios.post(
+        "http://localhost:5000/api/auth/register",
+        form
+      );
+      localStorage.setItem("token", res.data.token);
+      navigate("/");
+    } catch (err) {
+      setError(
+        err.response?.data?.message === "Username already exists"
+          ? "Username is already taken. Please choose another."
+          : err.response?.data?.message ||
+              "Something went wrong. Please try again."
+      );
+    } finally {
+      setLoading(false);
     }
-
-    // 👉 here you’d normally send the data to your backend
-    alert(
-      `Username: ${form.username}\nEmail: ${form.email}\nPassword: ${form.password}`
-    );
-
-    // ✅ redirect the user to /login
-    navigate("/login");
   };
-
-  /* ---------- Colorful & Modern Styling ---------- */
-  const styles = {
-    container: {
-      minHeight: "100vh",
-      display: "flex",
-      justifyContent: "center",
-      alignItems: "center",
-      background: "linear-gradient(135deg, #f7971e, #ffd200)",
-      padding: "20px",
-    },
-    form: {
-      backgroundColor: "#ffffff",
-      padding: "32px",
-      borderRadius: "16px",
-      boxShadow: "0 12px 30px rgba(0, 0, 0, 0.15)",
-      width: "100%",
-      maxWidth: "400px",
-      display: "flex",
-      flexDirection: "column",
-    },
-    heading: {
-      textAlign: "center",
-      fontSize: "1.8rem",
-      marginBottom: "20px",
-      background: "linear-gradient(to right, #f7971e, #ff416c)",
-      WebkitBackgroundClip: "text",
-      WebkitTextFillColor: "transparent",
-      fontWeight: "bold",
-    },
-    label: {
-      fontWeight: "500",
-      marginBottom: "4px",
-      color: "#444",
-    },
-    input: {
-      padding: "10px",
-      fontSize: "15px",
-      border: "1px solid #ccc",
-      borderRadius: "8px",
-      marginBottom: "16px",
-      transition: "all 0.25s",
-    },
-    inputFocus: {
-      borderColor: "#f7971e",
-      boxShadow: "0 0 0 3px rgba(247, 151, 30, 0.2)",
-    },
-    button: {
-      padding: "12px",
-      background: "linear-gradient(to right, #ff416c, #ff4b2b)",
-      color: "#fff",
-      fontWeight: "600",
-      fontSize: "1rem",
-      border: "none",
-      borderRadius: "8px",
-      cursor: "pointer",
-      transition: "transform 0.2s ease, box-shadow 0.2s ease",
-    },
-  };
-
-  /* ---------- Dynamic focus style ---------- */
-  const [focusField, setFocusField] = useState(null);
-  const applyFocus = (field) =>
-    focusField === field ? { ...styles.input, ...styles.inputFocus } : styles.input;
 
   return (
-    <div style={styles.container}>
-      <form onSubmit={handleRegister} style={styles.form}>
-        <h2 style={styles.heading}>Register</h2>
+    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-cyan-50 to-blue-100 px-4">
+      <div className="w-full max-w-xl bg-white shadow-2xl p-10 rounded-2xl border-t-4 border-cyan-500">
+        {/* Logo or App name */}
+        <div className="text-center mb-8">
+          <h1 className="text-4xl font-extrabold text-cyan-600">Kinnect</h1>
+          <p className="text-gray-500 mt-1 text-sm">
+            Connect seamlessly with your world 🌐
+          </p>
+        </div>
 
-        <label style={styles.label}>Username</label>
-        <input
-          name="username"
-          type="text"
-          value={form.username}
-          onChange={handleChange}
-          onFocus={() => setFocusField("username")}
-          onBlur={() => setFocusField(null)}
-          style={applyFocus("username")}
-          required
-        />
+        {/* Title */}
+        <div className="flex items-center gap-2 mb-6 text-cyan-600">
+          <FiUserPlus className="text-2xl" />
+          <h2 className="text-xl font-semibold">Create Your Kinnect Account</h2>
+        </div>
 
-        <label style={styles.label}>Email</label>
-        <input
-          name="email"
-          type="email"
-          value={form.email}
-          onChange={handleChange}
-          onFocus={() => setFocusField("email")}
-          onBlur={() => setFocusField(null)}
-          style={applyFocus("email")}
-          required
-        />
+        {/* Error Message */}
+        {error && (
+          <div className="bg-red-100 text-red-700 border border-red-200 p-3 mb-4 rounded-md text-sm">
+            {error}
+          </div>
+        )}
 
-        <label style={styles.label}>Password</label>
-        <input
-          name="password"
-          type="password"
-          value={form.password}
-          onChange={handleChange}
-          onFocus={() => setFocusField("password")}
-          onBlur={() => setFocusField(null)}
-          style={applyFocus("password")}
-          required
-        />
+        {/* Form */}
+        <form onSubmit={handleSubmit} className="space-y-4">
+          <input
+            name="username"
+            placeholder="Username"
+            value={form.username}
+            onChange={handleChange}
+            required
+            className={`w-full p-3 rounded-lg border ${
+              error.includes("Username") ? "border-red-400" : "border-gray-300"
+            } focus:ring-2 focus:ring-cyan-500 outline-none`}
+          />
+          <input
+            name="email"
+            type="email"
+            placeholder="Email"
+            value={form.email}
+            onChange={handleChange}
+            required
+            className="w-full p-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-cyan-500 outline-none"
+          />
+          <input
+            name="password"
+            type="password"
+            placeholder="Password"
+            value={form.password}
+            onChange={handleChange}
+            required
+            className="w-full p-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-cyan-500 outline-none"
+          />
 
-        <label style={styles.label}>Confirm Password</label>
-        <input
-          name="confirmPassword"
-          type="password"
-          value={form.confirmPassword}
-          onChange={handleChange}
-          onFocus={() => setFocusField("confirmPassword")}
-          onBlur={() => setFocusField(null)}
-          style={applyFocus("confirmPassword")}
-          required
-        />
+          <Button
+            type="submit"
+            variant="primary"
+            disabled={loading}
+            className="w-full mt-4 bg-cyan-600 hover:bg-cyan-700 text-white font-medium rounded-lg p-3 disabled:opacity-50 transition-all"
+          >
+            {loading ? "Registering..." : "Register"}
+          </Button>
+        </form>
 
-        <button
-          type="submit"
-          style={styles.button}
-          onMouseEnter={(e) => {
-            e.currentTarget.style.transform = "translateY(-2px)";
-            e.currentTarget.style.boxShadow =
-              "0 8px 22px rgba(255, 65, 108, 0.4)";
-          }}
-          onMouseLeave={(e) => {
-            e.currentTarget.style.transform = "translateY(0)";
-            e.currentTarget.style.boxShadow = "none";
-          }}
-        >
-          Register
-        </button>
-      </form>
+        {/* Footer Link */}
+        <p className="mt-6 text-sm text-center text-gray-600">
+          Already have an account?{" "}
+          <Link
+            to="/login"
+            className="text-cyan-600 font-medium hover:underline"
+          >
+            Login here
+          </Link>
+        </p>
+      </div>
     </div>
   );
-}
+};
 
 export default Register;
