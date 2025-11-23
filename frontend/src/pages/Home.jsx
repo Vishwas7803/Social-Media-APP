@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { MdCampaign } from "react-icons/md";
-import PostCard from "../components/PostCard";
+import PostCard from "../components/Postcard";
 import { useAuth } from "../contexts/AuthContexts";
 import KinnectLoader from "../components/KinnectLoader"; // ⬅️ Import here
 import axios from "axios";
