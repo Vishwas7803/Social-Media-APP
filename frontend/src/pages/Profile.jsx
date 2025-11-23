@@ -1,7 +1,7 @@
 import { useEffect, useState, useRef } from "react";
 import { useAuth } from "../contexts/AuthContexts";
 import { FaUserEdit, FaSignOutAlt, FaUpload } from "react-icons/fa";
-import PostCard from "../components/PostCard";
+import PostCard from "../components/Postcard";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import KinnectLoader from "../components/KinnectLoader";
